@@ -1,32 +1,39 @@
 const express = require('express');
 const app = express();
-const tf = require('@tensorflow/tfjs-node'); // ⬅️ Ganti dari @tensorflow/tfjs ke tfjs-node
+const tf = require('@tensorflow/tfjs');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 
-// Middleware
+
 app.use(express.json());
 app.use(cors());
-app.use('/public', express.static(path.join(__dirname, 'public'))); // ⬅️ serve model dari folder public
-app.use(express.static(path.join(__dirname, 'mechineLearning')));
 
 let durationModel = null;
 let entryModel = null;
 
 const loadModels = async () => {
   try {
-    const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`;
-    console.log(`🔁 Loading models from ${baseURL}`);
+    const durationModelJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'public/duration-model/model.json'), 'utf8'));
+    const durationModelWeights = fs.readFileSync(path.resolve(__dirname, 'public/duration-model/group1-shard1of1.bin'));
+    durationModel = await tf.loadLayersModel(tf.io.browserFiles([
+      new File([JSON.stringify(durationModelJson)], 'model.json', { type: 'application/json' }),
+      new File([durationModelWeights], 'group1-shard1of1.bin', { type: 'application/octet-stream' })
+    ]));
 
-    durationModel = await tf.loadLayersModel(`${baseURL}/public/duration-model/model.json`);
-    entryModel = await tf.loadLayersModel(`${baseURL}/public/entry-model/model.json`);
+    const entryModelJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'public/entry-model/model.json'), 'utf8'));
+    const entryModelWeights = fs.readFileSync(path.resolve(__dirname, 'public/entry-model/group1-shard1of1.bin'));
+    entryModel = await tf.loadLayersModel(tf.io.browserFiles([
+      new File([JSON.stringify(entryModelJson)], 'model.json', { type: 'application/json' }),
+      new File([entryModelWeights], 'group1-shard1of1.bin', { type: 'application/octet-stream' })
+    ]));
 
     console.log('✅ Models loaded successfully');
   } catch (err) {
     console.error('❌ Error loading models:', err);
   }
 };
+
 
 const fullScaler = JSON.parse(fs.readFileSync('mechineLearning/scaler/scaler.json', 'utf8'));
 const shortScaler = JSON.parse(fs.readFileSync('mechineLearning/scaler/scalerdua.json', 'utf8'));
@@ -43,34 +50,7 @@ function standardScale(inputObj, scaler) {
   return { values, fields };
 }
 
-// 🔵 Endpoint: Prediksi durasi konsultasi
-app.post('/predict-duration', async (req, res) => {
-  try {
-    if (!durationModel) return res.status(503).json({ error: 'Duration model not loaded yet' });
-
-    const inputObj = req.body.input;
-    const { values } = standardScale(inputObj, fullScaler);
-
-    const inputTensor = tf.tensor([values]);
-    const prediction = durationModel.predict(inputTensor);
-    const result = await prediction.data();
-    const scaledOutput = result[0];
-
-    const targetMean = fullScaler["ConsultationDurationTime"].mean;
-    const targetStd = fullScaler["ConsultationDurationTime"].scale;
-    const durationInMinutes = (scaledOutput * targetStd) + targetMean;
-
-    res.json({
-      prediction_scaled: scaledOutput,
-      prediction_minutes: durationInMinutes,
-      prediction_seconds: durationInMinutes * 60
-    });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-// 🔴 Endpoint: Prediksi jam masuk poli
+// 🔴 Endpoint 2: Estimasi **Jam Masuk Poli**
 app.post('/predict-entry', async (req, res) => {
   try {
     if (!entryModel) return res.status(503).json({ error: 'Entry model not loaded yet' });
@@ -97,14 +77,43 @@ app.post('/predict-entry', async (req, res) => {
   }
 });
 
-// Halaman utama
+// 🔵 Endpoint 1: Estimasi **Durasi Konsultasi Poli**
+app.post('/predict-duration', async (req, res) => {
+  try {
+    if (!durationModel) return res.status(503).json({ error: 'Duration model not loaded yet' });
+
+    const inputObj = req.body.input;
+    const { values } = standardScale(inputObj, fullScaler);
+
+    const inputTensor = tf.tensor([values]);
+    const prediction = durationModel.predict(inputTensor);
+    const result = await prediction.data();
+    const scaledOutput = result[0];
+
+    const targetMean = fullScaler["ConsultationDurationTime"].mean;
+    const targetStd = fullScaler["ConsultationDurationTime"].scale;
+    const durationInMinutes = (scaledOutput * targetStd) + targetMean;
+
+    res.json({
+      prediction_scaled: scaledOutput,
+      prediction_minutes: durationInMinutes,
+      prediction_seconds: durationInMinutes * 60
+    });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+
+// Serve file HTML/JS/CSS dari mechineLearning
+app.use(express.static(path.join(__dirname, 'mechineLearning')));
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'mechineLearning', 'index.html'));
 });
 
-// Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', async () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
-  await loadModels(); // ⬅️ panggil loadModels saat server nyala
 });
+

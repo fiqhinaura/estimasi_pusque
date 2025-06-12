@@ -14,8 +14,11 @@ let entryModel = null;
 
 async function loadModels() {
   try {
-    durationModel = await tf.loadLayersModel('file://' + path.join(__dirname, 'public/duration-model/model.json'));
-    entryModel = await tf.loadLayersModel('file://' + path.join(__dirname, 'public/entry-model/model.json'));
+    const modelPathDuration = path.resolve(__dirname, 'public/duration-model/model.json');
+const modelPathEntry = path.resolve(__dirname, 'public/entry-model/model.json');
+
+durationModel = await tf.loadLayersModel(`file://${modelPathDuration}`);
+entryModel = await tf.loadLayersModel(`file://${modelPathEntry}`);
     console.log('✅ Models loaded successfully');
   } catch (err) {
     console.error('❌ Error loading models:', err.message);

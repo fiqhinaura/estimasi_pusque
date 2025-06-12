@@ -1,0 +1,70 @@
+{
+    "TotalDelayTime": {
+      "mean": 151.22,
+      "scale": 72.82
+    },
+    "TriageToProviderStartTime": {
+      "mean": 49.53,
+      "scale": 39.75
+    },
+    "TestsToDischargeTime": {
+      "mean": 44.88,
+      "scale": 40.59
+    },
+    "ProviderEndToTestsCompleteTime": {
+      "mean": 38.27,
+      "scale": 36.31
+    },
+    "Department_Poli_Gigi": {
+      "mean": 0.10,
+      "scale": 0.30
+    },
+    "Department_Poli_KIA_KB": {
+      "mean": 0.10,
+      "scale": 0.30
+    },
+    "Department_Poli_Lansia": {
+      "mean": 0.10,
+      "scale": 0.30
+    },
+    "Department_Poli_Umum": {
+      "mean": 0.69,
+      "scale": 0.46
+    },
+    "ProvidersOnShift": {
+      "mean": 4.98,
+      "scale": 2.00
+    },
+    "NursesOnShift": {
+      "mean": 9.01,
+      "scale": 3.74
+    },
+    "StaffToPatientRatio": {
+      "mean": 0.30,
+      "scale": 0.11
+    },
+    "Year": {
+      "mean": 2024.00,
+      "scale": 1.00
+    },
+    "Month": {
+      "mean": 2.01,
+      "scale": 0.83
+    },
+    "Day": {
+      "mean": 15.67,
+      "scale": 8.82
+    },
+    "DayOfWeek": {
+      "mean": 3.01,
+      "scale": 2.02
+    },
+    "IsWeekend": {
+      "mean": 0.30,
+      "scale": 0.46
+    },
+    "Quarter": {
+      "mean": 1.00,
+      "scale": 1.00
+    }
+}

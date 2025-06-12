@@ -1,0 +1,130 @@
+{
+    "FacilityOccupancyRate": {
+        "mean": 0.6271199999999999,
+        "scale": 0.18775118002292288
+    },
+    "ProvidersOnShift": {
+        "mean": 4.9805,
+        "scale": 2.0001549314990577
+    },
+    "NursesOnShift": {
+        "mean": 9.01225,
+        "scale": 3.738930319957835
+    },
+    "StaffToPatientRatio": {
+        "mean": 0.30301999999999996,
+        "scale": 0.1146336756804038
+    },
+    "IsRegistered": {
+        "mean": 0.2975,
+        "scale": 0.45715834237165576
+    },
+    "IsOnlineBooking": {
+        "mean": 0.7025,
+        "scale": 0.45715834237165576
+    },
+    "Year": {
+        "mean": 2024.0,
+        "scale": 1.0
+    },
+    "Day": {
+        "mean": 15.6705,
+        "scale": 8.815068334959179
+    },
+    "IsWeekend": {
+        "mean": 0.297,
+        "scale": 0.45693653826324726
+    },
+    "Quarter": {
+        "mean": 1.0,
+        "scale": 1.0
+    },
+    "ArrivalDelayTime": {
+        "mean": -10.26903750001475,
+        "scale": 15.099612113418283
+    },
+    "RegistrationWaitTimeTime": {
+        "mean": 5.977865410238249,
+        "scale": 1.23138595222625
+    },
+    "RegistrationToCheckInTime": {
+        "mean": -2.9707338031687494,
+        "scale": 1.3714669003458617
+    },
+    "CheckInToNurseTime": {
+        "mean": 3.2078410468564997,
+        "scale": 3.492014234177846
+    },
+    "NurseToTriageCompleteTime": {
+        "mean": 3.9660131198195,
+        "scale": 1.1530772845457506
+    },
+    "TriageToProviderStartTime": {
+        "mean": 51.543200000201004,
+        "scale": 46.27758328841755
+    },
+    "ConsultationDurationTime": {
+        "mean": 18.650058333300503,
+        "scale": 9.059329084913092
+    },
+    "ProviderEndToTestsCompleteTime": {
+        "mean": 38.75443750001751,
+        "scale": 37.99046468022324
+    },
+    "TestsToDischargeTime": {
+        "mean": 44.87645833348176,
+        "scale": 40.590170878289776
+    },
+    "TotalTimeInHospital": {
+        "mean": 164.03089166654752,
+        "scale": 72.73818251010962
+    },
+    "TotalDelayTime": {
+        "mean": 151.6310583339055,
+        "scale": 74.116449900535
+    },
+    "ArrivalHour": {
+        "mean": 11.66625,
+        "scale": 2.606503584785565
+    },
+    "ArrivalDayOfWeek": {
+        "mean": 3.01425,
+        "scale": 2.019665055770387
+    },
+    "ArrivalMonth": {
+        "mean": 2.00525,
+        "scale": 0.8271773917969469
+    },
+    "RegistrationTime_missing": {
+        "mean": 0.7025,
+        "scale": 0.45715834237165576
+    },
+    "TimeFromArrivalToNurse": {
+        "mean": 322.92894999999993,
+        "scale": 106.2301656870472
+    },
+    "TimeFromNurseToDoctor": {
+        "mean": 233.97636249999996,
+        "scale": 150.76100719563928
+    },
+    "AppointmentHour": {
+        "mean": 11.9605,
+        "scale": 2.5768080545512118
+    },
+    "VisitDayOfWeek": {
+        "mean": 3.01425,
+        "scale": 2.019665055770387
+    },
+    "VisitMonth": {
+        "mean": 2.00525,
+        "scale": 0.8271773917969469
+    },
+    "VisitYear": {
+        "mean": 2024.0,
+        "scale": 1.0
+    },
+    "VisitDayOfMonth": {
+        "mean": 15.6705,
+        "scale": 8.815068334959179
+    }
+}

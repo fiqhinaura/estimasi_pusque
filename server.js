@@ -3,8 +3,6 @@ const app = express();
 const tf = require('@tensorflow/tfjs');
 const cors = require('cors');
 const fs = require('fs');
-const path = require('path');
-
 
 app.use(express.json());
 app.use(cors());
@@ -12,28 +10,16 @@ app.use(cors());
 let durationModel = null;
 let entryModel = null;
 
-const loadModels = async () => {
+async function loadModels() {
   try {
-    const durationModelJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'public/duration-model/model.json'), 'utf8'));
-    const durationModelWeights = fs.readFileSync(path.resolve(__dirname, 'public/duration-model/group1-shard1of1.bin'));
-    durationModel = await tf.loadLayersModel(tf.io.browserFiles([
-      new File([JSON.stringify(durationModelJson)], 'model.json', { type: 'application/json' }),
-      new File([durationModelWeights], 'group1-shard1of1.bin', { type: 'application/octet-stream' })
-    ]));
-
-    const entryModelJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'public/entry-model/model.json'), 'utf8'));
-    const entryModelWeights = fs.readFileSync(path.resolve(__dirname, 'public/entry-model/group1-shard1of1.bin'));
-    entryModel = await tf.loadLayersModel(tf.io.browserFiles([
-      new File([JSON.stringify(entryModelJson)], 'model.json', { type: 'application/json' }),
-      new File([entryModelWeights], 'group1-shard1of1.bin', { type: 'application/octet-stream' })
-    ]));
-
+    durationModel = await tf.loadLayersModel('http://127.0.0.1:8000/duration-model/model.json');
+    entryModel = await tf.loadLayersModel('http://127.0.0.1:8000/entry-model/model.json');
     console.log('✅ Models loaded successfully');
   } catch (err) {
-    console.error('❌ Error loading models:', err);
+    console.error('❌ Error loading models:', err.message);
   }
-};
-
+}
+loadModels();
 
 const fullScaler = JSON.parse(fs.readFileSync('mechineLearning/scaler/scaler.json', 'utf8'));
 const shortScaler = JSON.parse(fs.readFileSync('mechineLearning/scaler/scalerdua.json', 'utf8'));
@@ -104,16 +90,7 @@ app.post('/predict-duration', async (req, res) => {
   }
 });
 
-
-// Serve file HTML/JS/CSS dari mechineLearning
-app.use(express.static(path.join(__dirname, 'mechineLearning')));
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'mechineLearning', 'index.html'));
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
-});
-

@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const tf = require('@tensorflow/tfjs-node');
+const tf = require('@tensorflow/tfjs');
 const cors = require('cors');
 const fs = require('fs');
 

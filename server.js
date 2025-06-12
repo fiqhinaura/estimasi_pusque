@@ -92,7 +92,6 @@ app.post('/predict-duration', async (req, res) => {
   }
 });
 
-const path = require('path');
 
 // Serve file HTML/JS/CSS dari mechineLearning
 app.use(express.static(path.join(__dirname, 'mechineLearning')));

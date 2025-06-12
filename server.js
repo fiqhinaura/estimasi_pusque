@@ -12,8 +12,8 @@ let entryModel = null;
 
 async function loadModels() {
   try {
-    durationModel = await tf.loadLayersModel('file://public/duration-model/model.json');
-    entryModel = await tf.loadLayersModel('file://public/entry-model/model.json');
+    durationModel = await tf.loadLayersModel('file://' + path.join(__dirname, 'public/duration-model/model.json'));
+    entryModel = await tf.loadLayersModel('file://' + path.join(__dirname, 'public/entry-model/model.json'));
     console.log('✅ Models loaded successfully');
   } catch (err) {
     console.error('❌ Error loading models:', err.message);
@@ -90,7 +90,17 @@ app.post('/predict-duration', async (req, res) => {
   }
 });
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+const path = require('path');
+
+// Serve file HTML/JS/CSS dari mechineLearning
+app.use(express.static(path.join(__dirname, 'mechineLearning')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'mechineLearning', 'index.html'));
 });
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
+});
+
